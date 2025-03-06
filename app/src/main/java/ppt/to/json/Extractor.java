@@ -37,7 +37,13 @@ public class Extractor {
         this.config = config;
     }
 
-    public SlideShow Extract(File pptFile) throws EncryptedDocumentException, IOException {
+    /**
+     * Extracts a {@code SlideShow} from a given power point file
+     * @param pptFile the power point file to extract from
+     * @return A new {@code SlideShow} record
+     * @throws IOException
+     */
+    public SlideShow Extract(File pptFile) throws IOException {
         SlideShow slideShow;
 
         final FileInputStream fileInputStream = new FileInputStream(pptFile);
