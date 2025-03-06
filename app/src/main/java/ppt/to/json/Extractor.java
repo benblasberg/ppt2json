@@ -1,6 +1,7 @@
 package ppt.to.json;
 
 import java.awt.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -21,7 +22,8 @@ import org.apache.poi.xslf.usermodel.XSLFTextShape;
 public class Extractor {
 
     public record Config(
-        boolean excludeImages
+        boolean excludeImages,
+        boolean verbose
     ) {
     }
 
@@ -31,11 +33,10 @@ public class Extractor {
         this.config = config;
     }
     
-    public SlideShow Extract(String pptFile) throws EncryptedDocumentException, IOException {
-        PrintStream out = System.out;
+    public SlideShow Extract(File pptFile) throws EncryptedDocumentException, IOException {
         SlideShow slideShow;
 
-        FileInputStream fileInputStream = new FileInputStream(pptFile);
+        final FileInputStream fileInputStream = new FileInputStream(pptFile);
         try (XMLSlideShow ppt = new XMLSlideShow(fileInputStream)) {
             fileInputStream.close();
 
@@ -53,7 +54,7 @@ public class Extractor {
                         }
                     }
                     else {
-                        out.println( "Ignoring type: " + shape.getClass() );
+                        log("Ignoring type: " + shape.getClass());
                     }
                 }
 
@@ -95,5 +96,11 @@ public class Extractor {
         final double y = pShape.getAnchor().getY();
 
         return new Image(x, y, pData.getFileName(), encodedImage);
+    }
+
+    private void log(String message) {
+        if (this.config.verbose()) {
+            System.out.println(message);
+        }
     }
 }

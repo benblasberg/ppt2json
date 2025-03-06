@@ -8,6 +8,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    id("com.gradleup.shadow") version "9.0.0-beta10"
 }
 
 repositories {
@@ -29,6 +30,8 @@ dependencies {
     implementation("org.apache.poi:poi:5.4.0")
     implementation("org.apache.poi:poi-ooxml-full:5.4.0")
     implementation("com.google.code.gson:gson:2.12.1")
+    implementation("info.picocli:picocli:4.7.6")
+    implementation("org.apache.logging.log4j:log4j-core:2.24.3")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -47,3 +50,8 @@ tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
+
+tasks.jar {
+    manifest.attributes["Main-Class"] = "ppt.to.json.App"
+}
+

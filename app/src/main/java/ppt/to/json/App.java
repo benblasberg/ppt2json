@@ -3,26 +3,46 @@
  */
 package ppt.to.json;
 
-import java.io.IOException;
+import java.io.File;
+import java.util.concurrent.Callable;
 
 import com.google.gson.Gson;
-import org.apache.poi.EncryptedDocumentException;
+import picocli.CommandLine;
 
+@CommandLine.Command(name = "ppt2json", mixinStandardHelpOptions = true, version = "ppt2json 1.0",
+    description = "Parses a given .pptx file to JSON and prints to STDOUT.")
+public class App implements Callable<Integer> {
+    public static void main(String[] args) {
+        int exitCode = new CommandLine(new App()).execute(args);
+        System.exit(exitCode);
 
-public class App {
-    public static void main(String[] args) throws EncryptedDocumentException, IOException {
         // TODO: CLI with options here
+        // build step (create executable jar)
         // Also, Dockerize
         // Add tests
         // Look into shape parsing
+    }
 
+    @CommandLine.Parameters(index = "0", description = "The pptx file to parse.")
+    private File pptxFile;
 
-        Extractor extractor = new Extractor(new Extractor.Config( true ));
+    @CommandLine.Option(names = {"--exclude-images"}, description = "Excludes images from the json output")
+    private boolean excludeImages = false;
 
-        final var slideShow = extractor.Extract( "/Users/ben/develop/java/ppt-to-json/Programming Exercise #4 Input.pptx" );
+    @CommandLine.Option(names = {"--verbose", "-v"}, description = "Prints debug messages during execution")
+    private boolean verbose = false;
+
+    @Override
+    public Integer call() throws Exception {
+        final Extractor extractor = new Extractor(new Extractor.Config( excludeImages, verbose ));
+
+        final var slideShow =
+            extractor.Extract(pptxFile);
 
         final Gson gson = new Gson();
 
         System.out.println(gson.toJson( slideShow ));
+
+        return 0;
     }
 }
