@@ -27,14 +27,18 @@ public class App implements Callable<Integer> {
     private File pptxFile;
 
     @CommandLine.Option(names = {"--exclude-images"}, description = "Excludes images from the json output")
-    private boolean excludeImages = false;
+    private boolean shouldExcludeImages = false;
+
+    @CommandLine.Option(names = {"--exclude-xml"}, description = "Excludes shape xml from the json output")
+    private boolean shouldExcludeXml = false;
 
     @CommandLine.Option(names = {"--verbose", "-v"}, description = "Prints debug messages during execution")
     private boolean verbose = false;
 
+
     @Override
     public Integer call() throws Exception {
-        final Extractor extractor = new Extractor(new Extractor.Config( excludeImages, verbose ));
+        final Extractor extractor = new Extractor(new Extractor.Config( shouldExcludeXml, verbose, shouldExcludeXml ));
 
         final var slideShow =
             extractor.Extract(pptxFile);
