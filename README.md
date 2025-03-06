@@ -56,7 +56,7 @@ The response is structured like this.
 
 Assumptions:
 
-- Power point documents given are 2007 or greater format
+- Power point documents given are 2007 or newer format
 
 Build and execute:
 

@@ -60,7 +60,7 @@ public class Extractor {
                         }
                         case XSLFGroupShape gShape -> extractGroupShape(gShape).ifPresent(groupShapes::add);
                         default -> extractShape(shape).ifPresent(shapes::add);
-                        // NOTE: Depending on what information we want, we can parse every time of
+                        // NOTE: Depending on what information we want, we can parse every type of
                         // shape available here and include as many details as possible.
                         // This covers group shapes and a generic shape for now
                     }
