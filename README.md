@@ -60,6 +60,8 @@ Assumptions:
 
 Build and execute:
 
+Requires java 21+
+
 ```bash
 ./gradlew run shadowJar
 java -jar app/build/libs/app-all.jar <pptx file> <options>
@@ -76,4 +78,10 @@ Parses a given .pptx file to JSON and prints to STDOUT.
   -h, --help             Show this help message and exit.
   -v, --verbose          Prints debug messages during execution
   -V, --version          Print version information and exit.
+```
+
+Test:
+
+```bash
+./gradlew test
 ```

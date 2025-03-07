@@ -21,10 +21,6 @@ dependencies {
     testImplementation(libs.junit.jupiter)
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    // This dependency is used by the application.
-    implementation(libs.guava)
-
     implementation("org.apache.poi:poi-ooxml:5.4.0")
     implementation("org.apache.poi:poi-scratchpad:5.4.0")
     implementation("org.apache.poi:poi:5.4.0")

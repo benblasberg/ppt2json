@@ -156,7 +156,7 @@ public class Extractor {
 
     private String getXml(final XSLFShape shape) {
         if (this.config.excludeXml()) {
-            return "";
+            return null;
         }
 
         return shape.getXmlObject().xmlText();
