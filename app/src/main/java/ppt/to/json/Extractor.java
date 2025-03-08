@@ -10,13 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.xslf.usermodel.XMLSlideShow;
-import org.apache.poi.xslf.usermodel.XSLFGroupShape;
-import org.apache.poi.xslf.usermodel.XSLFPictureData;
-import org.apache.poi.xslf.usermodel.XSLFPictureShape;
-import org.apache.poi.xslf.usermodel.XSLFShape;
-import org.apache.poi.xslf.usermodel.XSLFSlide;
-import org.apache.poi.xslf.usermodel.XSLFTextShape;
+import org.apache.poi.xslf.usermodel.*;
 
 /**
  * Extractor extracts text/images/shapes from a given power point file
@@ -39,6 +33,7 @@ public class Extractor {
 
     /**
      * Extracts a {@code SlideShow} from a given power point file
+     *
      * @param pptFile the power point file to extract from
      * @return A new {@code SlideShow} record
      * @throws IOException
@@ -49,13 +44,13 @@ public class Extractor {
         final FileInputStream fileInputStream = new FileInputStream(pptFile);
         try (XMLSlideShow ppt = new XMLSlideShow(fileInputStream)) {
             fileInputStream.close();
-
             final List<Slide> slides = new ArrayList<>();
             for (final XSLFSlide slide : ppt.getSlides()) {
                 final List<Image> images = new ArrayList<>();
                 final List<TextSection> textSections = new ArrayList<>();
                 final List<Shape> shapes = new ArrayList<>();
                 final List<GroupShape> groupShapes = new ArrayList<>();
+
                 for (XSLFShape shape : slide) {
                     switch (shape) {
                         case XSLFTextShape txShape -> extractTextSection(txShape).ifPresent(textSections::add);
@@ -93,7 +88,7 @@ public class Extractor {
     }
 
     private Optional<TextSection> extractTextSection(final XSLFTextShape txShape) {
-        if (txShape.getText().isEmpty() || txShape.getText().isBlank() || txShape.isPlaceholder()) {
+        if (txShape.getText().isEmpty() || txShape.getText().isBlank()) {
             return Optional.empty();
         }
 
@@ -117,10 +112,6 @@ public class Extractor {
     }
 
     private Optional<GroupShape> extractGroupShape(final XSLFGroupShape gShape) {
-        if (gShape.isPlaceholder()) {
-            return Optional.empty();
-        }
-
         final List<Shape> shapes = new ArrayList<>();
         for (XSLFShape shape : gShape.getShapes()) {
             if (shape.isPlaceholder()) {
@@ -144,10 +135,6 @@ public class Extractor {
     }
 
     private Optional<Shape> extractShape(final XSLFShape shape) {
-        if (shape.isPlaceholder()) {
-            return Optional.empty();
-        }
-
         return Optional.of(new Shape(
                 new Position(shape.getAnchor().getX(), shape.getAnchor().getY()),
                 shape.getShapeName(),
